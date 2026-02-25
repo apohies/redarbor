@@ -11,8 +11,8 @@ REST API para gestión de empleados construida con .NET 8, siguiendo principios 
 - **Dapper** — Lecturas (Queries)
 - **MediatR** — Implementación del patrón CQRS
 - **FluentValidation** — Validaciones de dominio
-- **SQL Server / SQLite** — Base de datos
-- **Docker** — Containerización opcional
+- **MySQL 8** — Base de datos
+- **Docker + Docker Compose** — Containerización completa
 - **xUnit + Moq** — Tests unitarios
 
 ---
@@ -22,13 +22,15 @@ REST API para gestión de empleados construida con .NET 8, siguiendo principios 
 El proyecto sigue una arquitectura en capas basada en DDD y CQRS:
 
 ```
-src/
+Redarbor/
 ├── Redarbor.API/                  # Capa de presentación (Controllers, Middleware)
 ├── Redarbor.Application/          # Casos de uso (Commands, Queries, Handlers, DTOs)
 ├── Redarbor.Domain/               # Entidades, Value Objects, Interfaces del dominio
 ├── Redarbor.Infrastructure/       # EF Core (writes), Dapper (reads), Repositories
-tests/
-└── Redarbor.Tests/                # Tests unitarios
+├── Redarbor.Tests/                # Tests unitarios
+├── docker-compose.yml
+├── Dockerfile
+└── init.sql                       # Script de creación de la tabla
 ```
 
 ### Patrón CQRS
@@ -63,50 +65,44 @@ tests/
 
 ## Endpoints de la API
 
-| Método | Endpoint              | Descripción             |
-|--------|-----------------------|-------------------------|
-| GET    | /api/redarbor         | Obtener todos            |
-| GET    | /api/redarbor/{id}    | Obtener por ID           |
-| POST   | /api/redarbor         | Crear nuevo empleado     |
-| PUT    | /api/redarbor/{id}    | Actualizar empleado      |
-| DELETE | /api/redarbor/{id}    | Eliminar empleado        |
+| Método | Endpoint              | Descripción          |
+|--------|-----------------------|----------------------|
+| GET    | /api/redarbor         | Obtener todos        |
+| GET    | /api/redarbor/{id}    | Obtener por ID       |
+| POST   | /api/redarbor         | Crear nuevo empleado |
+| PUT    | /api/redarbor/{id}    | Actualizar empleado  |
+| DELETE | /api/redarbor/{id}    | Eliminar empleado    |
 
 ---
 
-## Ejecución local
+##  Ejecución con Docker (recomendado)
 
 ### Requisitos
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- SQL Server o SQLite (configurable en `appsettings.json`)
+- [Docker](https://www.docker.com/products/docker-desktop)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-### Pasos
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/tuusuario/redarbor-api.git
-cd redarbor-api
-
-# 2. Aplicar migraciones de base de datos
-dotnet ef database update --project src/Redarbor.Infrastructure
-
-# 3. Ejecutar la API
-dotnet run --project src/Redarbor.API
-```
-
-La API estará disponible en: `http://localhost:5000`
-
----
-
-## Ejecución con Docker
+### Levantar todo el entorno
 
 ```bash
-# Construir y levantar contenedores (API + SQL Server)
 docker-compose up --build
 ```
 
-El archivo `docker-compose.yml` incluye:
-- Servicio `api` (ASP.NET Core en puerto 5000)
-- Servicio `db` (SQL Server)
+Esto levanta automáticamente:
+- **MySQL 8** en el puerto `3306` con la base de datos y tabla `Employee` ya creadas
+- **API** en `http://localhost:8080`
+- **Swagger UI** en `http://localhost:8080/swagger`
+
+No necesitas instalar .NET ni MySQL en tu máquina. Todo corre dentro de Docker.
+
+### Parar y limpiar
+
+```bash
+# Parar los contenedores
+docker-compose down
+
+# Parar y eliminar también los volúmenes (resetea la BD)
+docker-compose down -v
+```
 
 ---
 
@@ -132,45 +128,56 @@ curl -i -XPOST -H "Content-Type: application/json" \
     "UpdatedOn": "2000-01-01 00:00:00",
     "Username": "test1"
   }' \
-  http://localhost:5000/api/redarbor/
+  http://localhost:8080/api/redarbor/
 ```
 
 ### 2. Obtener todos los empleados
 
 ```bash
-curl -s http://localhost:5000/api/redarbor/ | jq .
+curl -s http://localhost:8080/api/redarbor/ | jq .
 ```
 
 ### 3. Obtener un empleado por ID
 
 ```bash
-curl -s http://localhost:5000/api/redarbor/1 | jq .
+curl -s http://localhost:8080/api/redarbor/1 | jq .
 ```
 
 ### 4. Actualizar un empleado
 
 ```bash
 curl -s -i -XPUT -H "Content-Type: application/json" \
-  -d '{"Username": "test1updated", ...}' \
-  http://localhost:5000/api/redarbor/1
+  -d '{
+    "CompanyId": 1,
+    "Email": "test1@test.test.tmp",
+    "Fax": "000.000.000",
+    "Name": "test1",
+    "Password": "test",
+    "PortalId": 1,
+    "RoleId": 1,
+    "StatusId": 1,
+    "Telephone": "000.000.000",
+    "Username": "test1updated"
+  }' \
+  http://localhost:8080/api/redarbor/1
 ```
 
 ### 5. Verificar la actualización
 
 ```bash
-curl -s http://localhost:5000/api/redarbor/ | jq .
+curl -s http://localhost:8080/api/redarbor/ | jq .
 ```
 
 ### 6. Eliminar un empleado
 
 ```bash
-curl -s -XDELETE http://localhost:5000/api/redarbor/1
+curl -s -XDELETE http://localhost:8080/api/redarbor/1
 ```
 
 ### 7. Verificar que fue eliminado
 
 ```bash
-curl -s http://localhost:5000/api/redarbor/ | jq .
+curl -s http://localhost:8080/api/redarbor/ | jq .
 ```
 
 ---
@@ -178,11 +185,20 @@ curl -s http://localhost:5000/api/redarbor/ | jq .
 ## Tests unitarios
 
 ```bash
-dotnet test tests/Redarbor.Tests
+dotnet test Redarbor.Tests
 ```
 
+Los tests cubren handlers de Commands y Queries, validaciones de FluentValidation y repositorios con mocks.
 
+---
 
-## Autor
+## Principios aplicados
 
-Prueba técnica — Redarbor Backend
+- **DDD**: Entidades con comportamiento en el dominio, separación de capas
+- **CQRS**: Separación explícita de operaciones de lectura y escritura
+- **SOLID**: Interfaces por dependencia, responsabilidad única por clase/handler
+- **Clean Code**: Nombres expresivos, métodos pequeños, sin lógica duplicada
+- **OOP**: Encapsulación, herencia controlada, polimorfismo vía interfaces
+
+---
+
