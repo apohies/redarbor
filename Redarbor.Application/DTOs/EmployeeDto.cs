@@ -1,8 +1,6 @@
-using MediatR;
+namespace Redarbor.Application.DTOs;
 
-namespace Redarbor.Application.Commands.UpdateEmployee;
-
-public class UpdateEmployeeCommand : IRequest
+public class EmployeeDto
 {
     public int Id { get; set; }
     public int CompanyId { get; set; }

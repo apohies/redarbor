@@ -6,4 +6,7 @@ public interface IEmployeeReadRepository
 {
     Task<IEnumerable<Employee>> GetAllAsync();
     Task<Employee?> GetByIdAsync(int id);
+    Task<bool> ExistsByIdAsync(int id);
+    Task<bool> ExistsByEmailAsync(string email, int? excludeId = null);
+    Task<bool> ExistsByUsernameAsync(string username, int? excludeId = null);
 }
