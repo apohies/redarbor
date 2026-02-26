@@ -47,7 +47,10 @@ Redarbor/
 ## Endpoints de la API
 
 [Redarbor_final.json](https://github.com/user-attachments/files/25578562/Redarbor_final.json)
- 
+
+
+ <img width="1428" height="896" alt="Screenshot 2026-02-26 at 9 35 47 AM" src="https://github.com/user-attachments/assets/ba04dac2-b1fb-4a5d-bd73-7c43da84821e" />
+
 
 ---
 
