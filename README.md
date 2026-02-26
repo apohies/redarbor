@@ -8,6 +8,7 @@ REST API para gestión de empleados construida con .NET 8, siguiendo principios 
 
 - **ASP.NET Core 8** — Framework principal
 - **Entity Framework Core** — Escrituras (Commands)
+- ** JWT token  - Seguidad endpoints
 - **Dapper** — Lecturas (Queries)
 - **MediatR** — Implementación del patrón CQRS
 - **FluentValidation** — Validaciones de dominio
