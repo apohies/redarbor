@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redarbor.Application", "Red
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redarbor.Infrastructure", "Redarbor.Infrastructure\Redarbor.Infrastructure.csproj", "{CD9FDABA-5D88-41ED-9386-BDEDFE3910A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redarbor.Tests", "Redarbor.Tests\Redarbor.Tests.csproj", "{0EC0FC74-E754-494B-965A-4227E7D93951}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{CD9FDABA-5D88-41ED-9386-BDEDFE3910A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD9FDABA-5D88-41ED-9386-BDEDFE3910A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD9FDABA-5D88-41ED-9386-BDEDFE3910A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EC0FC74-E754-494B-965A-4227E7D93951}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EC0FC74-E754-494B-965A-4227E7D93951}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EC0FC74-E754-494B-965A-4227E7D93951}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EC0FC74-E754-494B-965A-4227E7D93951}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
