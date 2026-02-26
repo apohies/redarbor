@@ -41,37 +41,13 @@ Redarbor/
 
 ---
 
-## Modelo de Datos — Employee
 
-| Campo       | Tipo     | Obligatorio |
-|-------------|----------|-------------|
-| Id          | int      | Auto        |
-| CompanyId   | int      | ✅          |
-| Email       | string   | ✅          |
-| Password    | string   | ✅          |
-| PortalId    | int      | ✅          |
-| RoleId      | int      | ✅          |
-| StatusId    | int      | ✅          |
-| Username    | string   | ✅          |
-| Name        | string   | ❌          |
-| Fax         | string   | ❌          |
-| Telephone   | string   | ❌          |
-| CreatedOn   | datetime | ❌          |
-| UpdatedOn   | datetime | ❌          |
-| DeletedOn   | datetime | ❌          |
-| Lastlogin   | datetime | ❌          |
 
----
 
 ## Endpoints de la API
 
-| Método | Endpoint              | Descripción          |
-|--------|-----------------------|----------------------|
-| GET    | /api/redarbor         | Obtener todos        |
-| GET    | /api/redarbor/{id}    | Obtener por ID       |
-| POST   | /api/redarbor         | Crear nuevo empleado |
-| PUT    | /api/redarbor/{id}    | Actualizar empleado  |
-| DELETE | /api/redarbor/{id}    | Eliminar empleado    |
+[Redarbor_final.json](https://github.com/user-attachments/files/25578562/Redarbor_final.json)
+ 
 
 ---
 
