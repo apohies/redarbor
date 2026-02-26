@@ -58,4 +58,11 @@ public class EmployeeReadRepository : IEmployeeReadRepository
         var count = await connection.ExecuteScalarAsync<int>(sql, new { Username = username, ExcludeId = excludeId });
         return count > 0;
     }
+    
+    public async Task<Employee?> GetByUsernameAndPasswordAsync(string username, string password)
+    {
+        const string sql = "SELECT * FROM Employee WHERE Username = @Username AND Password = @Password";
+        using var connection = CreateConnection();
+        return await connection.QueryFirstOrDefaultAsync<Employee>(sql, new { Username = username, Password = password });
+    }
 }

@@ -9,4 +9,6 @@ public interface IEmployeeReadRepository
     Task<bool> ExistsByIdAsync(int id);
     Task<bool> ExistsByEmailAsync(string email, int? excludeId = null);
     Task<bool> ExistsByUsernameAsync(string username, int? excludeId = null);
+    
+    Task<Employee?> GetByUsernameAndPasswordAsync(string username, string password);
 }

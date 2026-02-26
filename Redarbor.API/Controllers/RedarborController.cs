@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Redarbor.Application.Commands.CreateEmployee;
 using Redarbor.Application.Commands.DeleteEmployee;
@@ -10,6 +11,7 @@ namespace Redarbor.API.Controllers;
 
 [ApiController]
 [Route("api/redarbor")]
+[Authorize]
 public class RedarborController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -38,6 +40,7 @@ public class RedarborController : ControllerBase
     }
 
     [HttpPost]
+    [AllowAnonymous] 
     public async Task<IActionResult> Create([FromBody] CreateEmployeeCommand command)
     {
         var result = await _mediator.Send(command);
