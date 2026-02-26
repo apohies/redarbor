@@ -20,6 +20,12 @@ public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeComman
 
     public async Task<EmployeeDto> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
+        
+        var validator = new CreateEmployeeCommandValidator();
+        var result = validator.Validate(request);
+        if (!result.IsValid)
+            throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
+        
         if (await _readRepository.ExistsByEmailAsync(request.Email))
             throw new InvalidOperationException($"Email '{request.Email}' already exists.");
 

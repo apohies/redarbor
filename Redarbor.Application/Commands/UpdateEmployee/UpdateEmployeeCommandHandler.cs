@@ -19,6 +19,12 @@ public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeComman
 
     public async Task Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
     {
+        
+        var validator = new UpdateEmployeeCommandValidator();
+        var result = validator.Validate(request);
+        if (!result.IsValid)
+            throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.ErrorMessage)));
+        
         if (!await _readRepository.ExistsByIdAsync(request.Id))
             throw new KeyNotFoundException($"Employee with id {request.Id} not found.");
 
